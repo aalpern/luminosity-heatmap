@@ -1,0 +1,30 @@
+body, p {
+    font-family: "Helvetica Neue", Helvetica, Arial, "Open Sans", sans-serif;
+}
+#report {
+    width: 1000;
+    margin-left: auto;
+    margin-right: auto;
+}
+.row.heatmap-container {
+    border-top: 1px solid #ddd;
+}
+h3 {
+    font-size: 2em;
+    margin: 0;
+}
+.stat {
+    color: #999;
+    display: block;
+}
+.stat .value {
+    font-weight: bold;
+    font-size: 1em;
+    text-align: right;
+}
+.stat .label {
+    font-weight: 200;
+    text-transform: uppercase;
+    font-size: .75em;
+    vertical-align: baseline;
+}
