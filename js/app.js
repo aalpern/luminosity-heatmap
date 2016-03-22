@@ -23,8 +23,8 @@ $.ajax({
         year: year,
         sum: sum,
         stats: [
-          { label: 'Total', value: d3.format(',3')(sum) },
-          { label: 'Max in one day', value: d3.format(',3')(max) },
+          { label: 'Total', value: d3.format(',3')(sum), cls: 'total' },
+          { label: 'Max in one day', value: d3.format(',3')(max) }
         ]
       }));
 

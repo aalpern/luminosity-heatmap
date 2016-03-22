@@ -1,7 +1,6 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>D3.js Calendar Heatmap</title>
     <link rel="stylesheet" type="text/css" href="css/calendar-heatmap.css">
     <link rel="stylesheet" type="text/css" href="css/flexboxgrid.min.css">
     <link rel="stylesheet" type="text/css" href="css/app.css">
@@ -15,9 +14,9 @@
   <body>
 
       <script id="stat" type="text/x-handlebars-template">
-          <span class="stat">
-              <span class="value">{{value}}</span>
-              <span class="label">{{label}}</span>
+          <tr class="stat {{cls}}">
+              <th class="value">{{value}}</th>
+              <td class="label">{{label}}</td>
           </span>
       </script>
 
@@ -25,9 +24,11 @@
           <div class="row heatmap-container">
               <div class="col-xs" >
                   <h3>{{year}}</h3>
+                  <table>
                   {{#each stats}}
                   {{> stat}}
-                  {{/each}}
+                      {{/each}}
+                  </table>
               </div>
               <div class="col-xs year" id="y{{year}}"></div>
           </div>
