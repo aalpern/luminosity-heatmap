@@ -17,16 +17,16 @@
 
       <script id="stat" type="text/x-handlebars-template">
           <tr class="stat {{cls}}">
-              <td class="label">{{label}}</td>
               <th class="value">{{value}}</th>
-          </span>
+              <td class="label">{{label}}</td>
+          </tr>
       </script>
 
       <script id="heatmap-template" type="text/x-handlebars-template">
           <div class="row heatmap-container">
-              <div class="col-xs" style="text-align:right">
+              <div class="col-xs">
                   <h3>{{year}}</h3>
-                  <table style="float:right">
+                  <table>
                   {{#each stats}}
                   {{> stat}}
                       {{/each}}
