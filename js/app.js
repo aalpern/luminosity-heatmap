@@ -18,20 +18,51 @@ $.ajax({
       var stats = by_year[year];
       var sum   = _.reduce(stats, function(m, n) { return m + n.count }, 0);
       var max   = _.reduce(stats, function(m, n) { return Math.max(m, n.count) }, 0);
+      var min   = _.reduce(stats, function(m, n) { return Math.min(m, n.count) }, 0);
+      var step  = max / 5
+      var steps = [0, step, step * 2, step * 3, step * 4]
 
       $('#report').append(tmpl({
         year: year,
         sum: sum,
         stats: [
           { label: 'Total', value: d3.format(',3')(sum), cls: 'total' },
-          { label: 'Max in one day', value: d3.format(',3')(max) }
+          { label: 'Max/day', value: d3.format(',3')(max) }
         ]
       }));
 
-      var id    = '#y' + year
-      var start = new Date(year + '-01-01T00:00');
-      var end   = new Date(year + '-12-31T23:59');
-      if (true) {
+      var id    = '#y' + year;
+      var start = new Date(year, 1, 1)
+      var end   = new Date(year, 12, 31)
+      var cal   = new CalHeatMap();
+
+      var cal_data = {}
+      stats.forEach(function(value) {
+        cal_data[value.date.getTime() / 1000] = value.count;
+      });
+
+      cal.init({
+        itemSelector: id,
+        domain: 'year',
+        range: 1,
+        subDomain: 'day',
+        start: start,
+        minDate: start,
+        maxDate: end,
+        data: cal_data,
+        tooltip: true,
+        displayLegend: false,
+        legend: steps,
+        legendColors: {
+          //min: '#D6E685',
+          max: '#1E6823',
+          min: '#efefef',
+          // max: 'steelblue'
+        }
+      });
+
+
+      if (false) {
         var heatmap = calendarHeatmap()
             .data(by_year[year])
             .dateRange(start, end)
