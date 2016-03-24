@@ -5,12 +5,16 @@ $.ajax({
   url: 'data.json',
   dataType: 'json',
 
-  success: function(data) {
+  success: function(catalog) {
+    var data = catalog.stats.by_date
+    data = data.filter(function(entry) {
+      return entry.label !== "";
+    })
     data.forEach(function(entry) {
       entry.date = new Date(entry.label)
     });
 
-    by_year = _.groupBy(data, function(entry) {
+    var by_year = _.groupBy(data, function(entry) {
       return entry.date.getFullYear();
     });
 
@@ -32,8 +36,8 @@ $.ajax({
       }));
 
       var id    = '#y' + year;
-      var start = new Date(year, 1, 1)
-      var end   = new Date(year, 12, 31)
+      var start = new Date(year, 0, 1)
+      var end   = new Date(year, 11, 31)
       var cal   = new CalHeatMap();
 
       var cal_data = {}
@@ -44,21 +48,18 @@ $.ajax({
       cal.init({
         itemSelector: id,
         domain: 'year',
-        range: 1,
         subDomain: 'day',
+        range: 1,
         start: start,
         minDate: start,
         maxDate: end,
         data: cal_data,
         tooltip: true,
         displayLegend: false,
+        domainDynamicDimension: false,
+        domainLabelFormat: "",
         legend: steps,
-        legendColors: {
-          //min: '#D6E685',
-          max: '#1E6823',
-          min: '#efefef',
-          // max: 'steelblue'
-        }
+        legendColors: ['#D6E685', '#1E6823']
       });
 
 
