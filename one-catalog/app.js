@@ -44,7 +44,7 @@ $.ajax({
       legendColors: ['#D6E685', '#1E6823']
     });
 
-    var sunburst_data = transmogrify(catalog);
+    var sunburst_data = transmogrify2(catalog);
     var chart;
     nv.addGraph(function() {
       chart = nv.models.sunburstChart();
