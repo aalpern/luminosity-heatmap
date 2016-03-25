@@ -2,11 +2,7 @@ body, p {
     font-family: "Helvetica Neue", Helvetica, Arial, "Open Sans", sans-serif;
 }
 #report {
-    width: 900;
-    margin-left: auto;
-    margin-right: auto;
-}
-#heatmap {
+    width: 1200;
     margin-left: auto;
     margin-right: auto;
 }
