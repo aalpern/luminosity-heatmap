@@ -1,0 +1,35 @@
+body, p {
+    font-family: "Helvetica Neue", Helvetica, Arial, "Open Sans", sans-serif;
+}
+#report {
+    width: 900;
+    margin-left: auto;
+    margin-right: auto;
+}
+.cal-heatmap-container {
+    margin-top: .5em;
+}
+.row.heatmap-container {
+    border-top: 1px solid #ddd;
+    margin-top: .5em;
+}
+h3 {
+    font-size: 2em;
+    margin: 0;
+    color: black;
+}
+.stat {
+    color: #999;
+}
+.stat .value {
+    font-weight: bold;
+    font-size: 1em;
+    text-align: right;
+}
+.stat .label {
+    font-weight: 200;
+    text-transform: uppercase;
+    font-size: .75em;
+    text-align: left;
+    /* vertical-align: baseline; */
+}
