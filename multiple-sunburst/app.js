@@ -1,3 +1,4 @@
+
 catalogs = [
   "c1",
   "c2",
@@ -15,13 +16,8 @@ catalogs.forEach(function(name) {
       var sunburst_data = transmogrify(catalog);
       var chart;
       nv.addGraph(function() {
-        chart = nv.models.sunburstChart();
-        // chart.showLabels(true);
-        // chart.color(d3.scale.category20c());
-        // var scale = d3.scale.ordinal()
-        // .range()
-        var scale = d3.scale.category20c()
-        chart.color(scale)
+        chart = nv.models.sunburstChart()
+                .color(d3.scale.category20c())
 
         d3.select("#" + name)
         .datum(sunburst_data)

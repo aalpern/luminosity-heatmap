@@ -1,11 +1,11 @@
+// -*- mode:typescript -*-
+
 function group_and_transmogrify(photos, field) {
-  var groups = _.groupBy(photos, function(p) {
-    return p[field]
-  })
+  var groups = _.groupBy(photos, p => p[field])
   return Object.keys(groups).map(function(key) {
     var ps = groups[key]
     return {
-      name: key,
+      name: key || '',
       size: ps.length,
       photos: ps
     }
@@ -75,7 +75,7 @@ function transmogrify(catalog) {
           var photos = exposure_time_groups[exposure]
 
           return {
-            name: exposure,
+            name: exposure || '',
             size: photos.length
           }
         }).sort(function(l,r) {
@@ -93,13 +93,13 @@ function transmogrify(catalog) {
 
       return {
         size: photos.length,
-        name: lens,
+        name: lens || '',
         children: fnumber_groups
       }
     })
 
     return {
-      name: camera,
+      name: camera || '',
       size: photos.length,
       children: lens_groups
     }
@@ -107,6 +107,7 @@ function transmogrify(catalog) {
 
   return [{
     name: "All",
+    size:     catalog.photos.length,
     children: camera_groups
   }]
 }
