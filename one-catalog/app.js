@@ -30,6 +30,9 @@ $.ajax({
     var steps = [0, step, step * 2, step * 3, step * 4]
     var cal   = new CalHeatMap();
 
+     var sunburst_data = transmogrify2(catalog);
+     console.log(sunburst_data);
+   
     cal.init({
       itemSelector: "#heatmap",
       domain: 'year',
@@ -43,18 +46,98 @@ $.ajax({
       legend: steps,
       legendColors: ['#D6E685', '#1E6823']
     });
+}
+})
 
-    var sunburst_data = transmogrify2(catalog);
+
+
+function nested_groupby(data, fields) {
+  
+}
+/*
+[
+  {
+    "aperture": "2",
+    "camera": "Canon PowerShot G9 X Mark II",
+    "count": "115",
+    "focal_length": "10.2",
+    "id": "997",
+    "lens": "10.2-30.6 mm"
+  },
+  {
+    "aperture": "2.3",
+    "camera": "Canon PowerShot G9 X Mark II",
+    "count": "72",
+    "focal_length": "10.2",
+    "id": "39412",
+    "lens": "10.2-30.6 mm"
+  },
+  etc...
+]
+*/
+
+class SunburstData {
+  constructor(label, data, fields) {
+    this.name = label
+    this.data = data
+    this.size = data.reduce((sum, record) => sum + parseInt(record.count), 0)
+
+    if (Array.isArray(fields) && fields.length) {
+      let field = fields[0]
+      
+      let groups_tmp = data.reduce((map, record) => {        
+        let key = record[field]
+        let group = map[key]
+        if (!group) {
+          group = {
+            name: key,
+            data: []
+          }
+          map[key] = group
+        }
+        group.data.push(record)
+        return map
+      }, {})     
+      let groups = Object.keys(groups_tmp).map((k) => groups_tmp[k])
+      this.children = groups.map(group => new SunburstData(group.name, group.data, fields.slice(1)))
+    }
+  }
+}
+
+$.ajax({
+  url: 'sunburst.json',
+  dataType: 'json',
+  
+  success: function(data) {
+    console.log(data)
+
+    let root1 = new SunburstData('All', data, ['camera', 'lens', 'aperture', 'focal_length'])
+    console.log(root1)
+    
     var chart;
     nv.addGraph(function() {
       chart = nv.models.sunburstChart();
       chart.color(d3.scale.category20c());
-      d3.select("#sunburst")
-      .datum(sunburst_data)
+      d3.select("#sunburst1")
+      .datum([root1])
       .call(chart);
       nv.utils.windowResize(chart.update);
       return chart;
     }); 
 
-  }
+    let root2 = new SunburstData('All', data, ['aperture', 'exposure'])
+    console.log(root2)
+    
+    var chart;
+    nv.addGraph(function() {
+      chart = nv.models.sunburstChart();
+      chart.color(d3.scale.category20c());
+      d3.select("#sunburst2")
+      .datum([root2])
+      .call(chart);
+      nv.utils.windowResize(chart.update);
+      return chart;
+    }); 
+
+  } 
 });
