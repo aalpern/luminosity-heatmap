@@ -111,33 +111,26 @@ $.ajax({
   success: function(data) {
     console.log(data)
 
-    let root1 = new SunburstData('All', data, ['camera', 'lens', 'aperture', 'focal_length'])
-    console.log(root1)
-    
-    var chart;
-    nv.addGraph(function() {
-      chart = nv.models.sunburstChart();
-      chart.color(d3.scale.category20c());
-      d3.select("#sunburst1")
-      .datum([root1])
-      .call(chart);
-      nv.utils.windowResize(chart.update);
-      return chart;
-    }); 
+    let sunburst_configs = [
+      { id: '#sunburst1', group_by: ['camera', 'lens', 'aperture'] },
+      { id: '#sunburst2', group_by: ['aperture', 'exposure'] },
+      { id: '#sunburst3', group_by: ['lens', 'exposure', 'aperture'] }
+    ]
 
-    let root2 = new SunburstData('All', data, ['aperture', 'exposure'])
-    console.log(root2)
-    
-    var chart;
-    nv.addGraph(function() {
-      chart = nv.models.sunburstChart();
-      chart.color(d3.scale.category20c());
-      d3.select("#sunburst2")
-      .datum([root2])
-      .call(chart);
-      nv.utils.windowResize(chart.update);
-      return chart;
-    }); 
+    for (let config of sunburst_configs) {
+      let root = new SunburstData('All', data, config.group_by)
+      console.log(root)    
 
-  } 
-});
+      var chart;
+      nv.addGraph(function() {
+        chart = nv.models.sunburstChart();
+        chart.color(d3.scale.category20c());
+        d3.select(config.id)
+          .datum([root])
+          .call(chart);
+        nv.utils.windowResize(chart.update);
+        return chart;
+      });
+    }
+  }
+})
