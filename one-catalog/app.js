@@ -54,7 +54,7 @@ $.ajax({
       .call(chart);
       nv.utils.windowResize(chart.update);
       return chart;
-    });
+    }); 
 
   }
 });
