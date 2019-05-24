@@ -77,14 +77,15 @@ function nested_groupby(data, fields) {
 */
 
 class SunburstData {
-  constructor(label, data, fields) {
+  constructor(label, data, groupby) {
+    this.chart = null
     this.name = label
     this.data = data
     this.size = data.reduce((sum, record) => sum + parseInt(record.count), 0)
 
-    if (Array.isArray(fields) && fields.length) {
-      let field = fields[0]
-      
+    if (Array.isArray(groupby) && groupby.length) {
+      // Group the data by the first field in the group by list
+      let field = groupby[0]
       let groups_tmp = data.reduce((map, record) => {        
         let key = record[field]
         let group = map[key]
@@ -97,10 +98,25 @@ class SunburstData {
         }
         group.data.push(record)
         return map
-      }, {})     
+      }, {})
+
+      // Flatten the groups into a list and recurse
       let groups = Object.keys(groups_tmp).map((k) => groups_tmp[k])
-      this.children = groups.map(group => new SunburstData(group.name, group.data, fields.slice(1)))
+      this.children = groups.map(group => new SunburstData(group.name, group.data, groupby.slice(1)))
     }
+  }
+
+  render(selector) {
+    let data = this
+    nv.addGraph(function() {
+      data.chart = nv.models.sunburstChart()
+      data.chart.color(d3.scale.category20c())
+      d3.select(selector)
+        .datum([data])
+        .call(data.chart)
+      nv.utils.windowResize(data.chart.update)
+      return data.chart
+    })
   }
 }
 
@@ -109,7 +125,6 @@ $.ajax({
   dataType: 'json',
   
   success: function(data) {
-    console.log(data)
 
     let sunburst_configs = [
       { id: '#sunburst1', group_by: ['camera', 'lens', 'aperture'] },
@@ -119,18 +134,7 @@ $.ajax({
 
     for (let config of sunburst_configs) {
       let root = new SunburstData('All', data, config.group_by)
-      console.log(root)    
-
-      var chart;
-      nv.addGraph(function() {
-        chart = nv.models.sunburstChart();
-        chart.color(d3.scale.category20c());
-        d3.select(config.id)
-          .datum([root])
-          .call(chart);
-        nv.utils.windowResize(chart.update);
-        return chart;
-      });
+      root.render(config.id)
     }
   }
 })
